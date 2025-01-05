@@ -10,14 +10,16 @@ function saveUserData(userData) {
   userData.setAddress(address.value);
   userData.setPhoneNumber(phoneNumber.value);
   console.log(userData.getAddress());
+
+  return userData;
 }
 function saveExperienceData(experienceData) {
   const jobTitle = document.querySelector("#jobTitle");
   const company = document.querySelector("#company");
-  const startMonth = document.querySelector("#startMonth");
-  const startYear = document.querySelector("#startYear");
-  const endMonth = document.querySelector("#endMonth");
-  const endYear = document.querySelector("#endYear");
+  const startMonth = document.querySelector("#monthsStart");
+  const startYear = document.querySelector("#yearStart");
+  const endMonth = document.querySelector("#monthsEnd");
+  const endYear = document.querySelector("#yearEnd");
   const currenctJob = document.querySelector("#currentJob");
   const description = document.querySelector("#description");
 
@@ -40,15 +42,34 @@ function saveEducationData(educationData) {
   const schoolLocation = document.querySelector("#schoolLocation");
   const field = document.querySelector("#fieldOfStudy");
   const degree = document.querySelector("#degree");
-  const endMonth = document.querySelector("#month");
+  const endMonth = document.querySelector("#months");
   const endYear = document.querySelector("#year");
 
   educationData.setSchool(school.value);
   educationData.setDegree(degree.value);
   educationData.setYear(endYear.value);
-  educationData.setMonth(endMonth.value)
+  educationData.setMonth(endMonth.value);
   educationData.setLocation(schoolLocation.value);
   educationData.setField(field.value);
 }
 
-export { saveUserData, saveExperienceData,saveEducationData };
+function saveLanguageData(languageData) {
+  const language = document.querySelector("#language");
+  const proficiency = document.querySelector("#proficiency");
+
+  languageData.setLanguage(language.value);
+  languageData.setProficiency(proficiency.value);
+}
+
+function saveSkillData(skillData) {
+  const skill = document.querySelector("#skill");
+  skillData.setSkill(skill.value);
+}
+
+export {
+  saveUserData,
+  saveExperienceData,
+  saveEducationData,
+  saveLanguageData,
+  saveSkillData,
+};

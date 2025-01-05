@@ -1,7 +1,14 @@
 import { useState } from "react";
 import "./App.css";
 import { user, experience, education, language, skill } from "./data.js";
-import { saveUserData } from "./dataInsertion.js";
+import {
+  saveUserData,
+  saveExperienceData,
+  saveEducationData,
+  saveLanguageData,
+  saveSkillData,
+} from "./dataInsertion.js";
+import DisplayCV from "./cv.jsx";
 
 function ContactInfo(userData) {
   const [firstName, setFirstName] = useState(userData.getFirstName());
@@ -137,7 +144,9 @@ function Experiences(experienceData) {
   const [endYear, setEndYear] = useState(experienceData.getEndYear());
   const [endMonth, setEndMonth] = useState(experienceData.getEndMonth());
   const [currentJob, setCurrentJob] = useState("");
-  const [description, setDescription] = useState(experienceData.getDescription());
+  const [description, setDescription] = useState(
+    experienceData.getDescription()
+  );
 
   function changeJobTitle(e) {
     setJobTitle(e.target.value);
@@ -195,11 +204,7 @@ function Experiences(experienceData) {
             Month
           </label>
           {Months("monthsStart", startMonth, changeStartMonth)}
-          <label
-            htmlFor="yearStart"
-          >
-            year
-          </label>
+          <label htmlFor="yearStart">year</label>
           {Years(0, "yearStart", startYear, changeStartYear)}
         </div>
         <div className="container">
@@ -233,7 +238,9 @@ function Experiences(experienceData) {
 
 function Education(educationData) {
   const [schoolName, setSchoolName] = useState(educationData.getSchool());
-  const [schoolLocation, setSchoolLocation] = useState(educationData.getLocation());
+  const [schoolLocation, setSchoolLocation] = useState(
+    educationData.getLocation()
+  );
   const [degree, setDegree] = useState(educationData.getDegree());
   const [field, setField] = useState(educationData.getField());
   const [endYear, setEndYear] = useState(educationData.getYear());
@@ -350,7 +357,12 @@ function Languages(languageData) {
         </div>
         <div className="container">
           <label htmlFor="proficiency">Proficiency</label>
-          <select name="levels" id="proficiency" value={proficiency} onChange={changeProficiency}>
+          <select
+            name="levels"
+            id="proficiency"
+            value={proficiency}
+            onChange={changeProficiency}
+          >
             {dispalyProficiency}
           </select>
         </div>
@@ -362,7 +374,7 @@ function Languages(languageData) {
 function Skills(skillData) {
   const [skill, setSkill] = useState(skillData.getSkill());
   function changeSkill(e) {
-    setSkill(e.target.value)
+    setSkill(e.target.value);
   }
   return (
     <section className="skills">
@@ -382,6 +394,13 @@ function SwitchingSections() {
   const languageData = language();
   const skillData = skill();
   const [index, setIndex] = useState(0);
+  const result = [
+    userData,
+    experienceData,
+    educationData,
+    languageData,
+    skillData,
+  ];
   const sections = [
     ContactInfo(userData),
     Experiences(experienceData),
@@ -389,17 +408,32 @@ function SwitchingSections() {
     Languages(languageData),
     Skills(skillData),
   ];
+  const profile = [
+    userData,
+    experienceData,
+    educationData,
+    languageData,
+    skillData,
+  ];
+  const actions = [
+    saveUserData,
+    saveExperienceData,
+    saveEducationData,
+    saveLanguageData,
+    saveSkillData,
+  ];
   const previousPage = index > 0;
   const nextPage = index + 1 < sections.length;
-
+  const [name, setName] = useState(result);
   function next() {
-    //saveUserData(userData);
+    result[index] = actions[index](profile[index])
+    setName(result);
     return nextPage ? setIndex(index + 1) : null;
   }
   function prev() {
     return previousPage ? setIndex(index - 1) : false;
   }
-
+  
   return (
     <>
       {sections[index]}
@@ -409,6 +443,9 @@ function SwitchingSections() {
       <button onClick={prev} disabled={!previousPage}>
         previous
       </button>
+      {<DisplayCV
+        result={name}
+      />}
     </>
   );
 }
