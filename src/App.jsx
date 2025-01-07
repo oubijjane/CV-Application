@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { jsPDF } from "jspdf";
 import "./App.css";
+import html2canvas from "html2canvas";
 import { user, experience, education, language, skill } from "./data.js";
 import {
   saveUserData,
@@ -394,13 +396,6 @@ function SwitchingSections() {
   const languageData = language();
   const skillData = skill();
   const [index, setIndex] = useState(0);
-  const result = [
-    userData,
-    experienceData,
-    educationData,
-    languageData,
-    skillData,
-  ];
   const sections = [
     ContactInfo(userData),
     Experiences(experienceData),
@@ -424,18 +419,27 @@ function SwitchingSections() {
   ];
   const previousPage = index > 0;
   const nextPage = index + 1 < sections.length;
-  const [name, setName] = useState(result);
+  const [result, setResult] = useState(profile);
+  function save() {
+    const updatedResult = [...result];
+    updatedResult[index] = actions[index](profile[index]);
+    setResult(updatedResult);
+  }
   function next() {
-    result[index] = actions[index](profile[index])
-    setName(result);
-    return nextPage ? setIndex(index + 1) : null;
+    save();
+    if (nextPage) {
+      setIndex(index + 1);
+    }
   }
   function prev() {
-    return previousPage ? setIndex(index - 1) : false;
+    save();
+    if (previousPage) {
+      setIndex(index - 1);
+    }
   }
-  
+
   return (
-    <>
+    <div className="doNotPrint">
       {sections[index]}
       <button onClick={next} disabled={!nextPage}>
         next
@@ -443,10 +447,10 @@ function SwitchingSections() {
       <button onClick={prev} disabled={!previousPage}>
         previous
       </button>
-      {<DisplayCV
-        result={name}
-      />}
-    </>
+      <button onClick={save}>save</button>
+      <DisplayCV result={result} />
+    </div>
   );
 }
+
 export default SwitchingSections;

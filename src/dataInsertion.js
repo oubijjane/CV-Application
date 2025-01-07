@@ -9,7 +9,6 @@ function saveUserData(userData) {
   userData.setEmail(email.value);
   userData.setAddress(address.value);
   userData.setPhoneNumber(phoneNumber.value);
-  console.log(userData.getAddress());
 
   return userData;
 }
@@ -25,16 +24,16 @@ function saveExperienceData(experienceData) {
 
   experienceData.setJobTitle(jobTitle.value);
   experienceData.setCompany(company.value);
-  experienceData.getStartYear(startYear.value);
+  experienceData.setStartYear(startYear.value);
   experienceData.setStartMonth(startMonth.value);
   if (currenctJob.checked) {
-    experienceData.setEndYear(new Date().getFullYear());
-    experienceData.setEndMonth(new Date().getMonth());
+    experienceData.setEndMonth("present");
   } else {
     experienceData.setEndYear(endYear.value);
     experienceData.setEndMonth(endMonth.value);
   }
   experienceData.setDescription(description.value);
+  return experienceData;
 }
 
 function saveEducationData(educationData) {
@@ -51,6 +50,8 @@ function saveEducationData(educationData) {
   educationData.setMonth(endMonth.value);
   educationData.setLocation(schoolLocation.value);
   educationData.setField(field.value);
+
+  return educationData;
 }
 
 function saveLanguageData(languageData) {
@@ -59,11 +60,15 @@ function saveLanguageData(languageData) {
 
   languageData.setLanguage(language.value);
   languageData.setProficiency(proficiency.value);
+
+  return languageData;
 }
 
 function saveSkillData(skillData) {
   const skill = document.querySelector("#skill");
   skillData.setSkill(skill.value);
+
+  return skillData;
 }
 
 export {

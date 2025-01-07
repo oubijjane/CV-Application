@@ -8,6 +8,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+
 }
 .container {
   display: flex;
@@ -17,3 +18,32 @@ section {
   width: 298px;
   height: 450px;
 }
+.cv {
+ width: 21cm;
+ min-height:  29cm;
+ font-size: 15pt;
+ border: 2px solid black;
+
+}
+.cv section{
+  height: auto;
+  
+  display: inline;
+}
+.cv p {
+  margin: 1px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+dialog {
+ /*  margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0; */
+}
+.cv .heading{
+  border-bottom: 2px solid black;
+  margin: 5px; 
+  font-weight: bold;
+}
+
+  
