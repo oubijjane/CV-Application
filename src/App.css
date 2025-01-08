@@ -45,5 +45,12 @@ dialog {
   margin: 5px; 
   font-weight: bold;
 }
+.doNotPrint {
+  overflow: auto;
+  max-height: 500px;
+}
+form{
+  margin-bottom: 20px;
+}
 
   

@@ -1,8 +1,13 @@
 import { useState } from "react";
-import { jsPDF } from "jspdf";
 import "./App.css";
-import html2canvas from "html2canvas";
-import { user, experience, education, language, skill } from "./data.js";
+import {
+  user,
+  experience,
+  education,
+  language,
+  skill,
+  IDGenerator,
+} from "./data.js";
 import {
   saveUserData,
   saveExperienceData,
@@ -11,7 +16,6 @@ import {
   saveSkillData,
 } from "./dataInsertion.js";
 import DisplayCV from "./cv.jsx";
-
 function ContactInfo(userData) {
   const [firstName, setFirstName] = useState(userData.getFirstName());
   function changeFirstName(e) {
@@ -138,7 +142,7 @@ function Years(buffer = 0, id, value, action) {
     </select>
   );
 }
-function Experiences(experienceData) {
+function Experiences(experienceData, action, id = -1) {
   const [JobTitle, setJobTitle] = useState(experienceData.getJobTitle());
   const [company, setCompany] = useState(experienceData.getCompany());
   const [startYear, setStartYear] = useState(experienceData.getStartYear());
@@ -175,7 +179,7 @@ function Experiences(experienceData) {
     setCurrentJob(e.target.value);
   }
   return (
-    <section className="experiences">
+    <section className="experiences" id={id}>
       <form>
         <div className="container">
           <label htmlFor="jobTitle">Job title*</label>
@@ -234,11 +238,12 @@ function Experiences(experienceData) {
           ></textarea>
         </div>
       </form>
+      <button onClick={action}>+</button>
     </section>
   );
 }
 
-function Education(educationData) {
+function Education(educationData, action) {
   const [schoolName, setSchoolName] = useState(educationData.getSchool());
   const [schoolLocation, setSchoolLocation] = useState(
     educationData.getLocation()
@@ -318,11 +323,12 @@ function Education(educationData) {
           {Years(10, "year", endYear, changeEndYear)}
         </div>
       </form>
+      <button onClick={action}>+</button>
     </section>
   );
 }
 
-function Languages(languageData) {
+function Languages(languageData, action) {
   const proficiencyLevels = [
     "Bigginer(A1)",
     "Elementary (A2)",
@@ -344,35 +350,32 @@ function Languages(languageData) {
       {level}
     </option>
   ));
-
   return (
     <section className="languages">
-      <form>
-        <div className="container">
-          <label htmlFor="language">Language</label>
-          <input
-            type="text"
-            id="language"
-            value={language}
-            onChange={changeLanguage}
-          />
-        </div>
-        <div className="container">
-          <label htmlFor="proficiency">Proficiency</label>
-          <select
-            name="levels"
-            id="proficiency"
-            value={proficiency}
-            onChange={changeProficiency}
-          >
-            {dispalyProficiency}
-          </select>
-        </div>
-      </form>
+      <div className="container">
+        <label htmlFor="language">Language</label>
+        <input
+          type="text"
+          id="language"
+          value={language}
+          onChange={changeLanguage}
+        />
+      </div>
+      <div className="container">
+        <label htmlFor="proficiency">Proficiency</label>
+        <select
+          name="levels"
+          id="proficiency"
+          value={proficiency}
+          onChange={changeProficiency}
+        >
+          {dispalyProficiency}
+        </select>
+      </div>
+      <button onClick={action}>+</button>
     </section>
   );
 }
-
 function Skills(skillData) {
   const [skill, setSkill] = useState(skillData.getSkill());
   function changeSkill(e) {
@@ -389,19 +392,41 @@ function Skills(skillData) {
     </section>
   );
 }
+function DisplayExpirienceData(data, remove, edit) {
+  let id = -1;
+  function changeid() {
+    id = id + 1;
+    return id;
+  }
+  const displayData = data.map((element) => (
+    <div key={IDGenerator.generateId()} id={changeid()}>
+      <p>{element.getCompany()}</p>
+      <p>{element.getJobTitle()}</p>
+      <button onClick={remove}>remove</button>
+      <button onClick={edit}>edit</button>
+    </div>
+  ));
+  return <section>{displayData}</section>;
+}
 function SwitchingSections() {
   const userData = user();
-  const experienceData = experience();
+  const [experienceData, setExp] = useState(experience());
   const educationData = education();
   const languageData = language();
   const skillData = skill();
+  const [toBeChanged, setToBeChanged] = useState(-1);
   const [index, setIndex] = useState(0);
+  const [languages, setlanguages] = useState([]);
+  const [jobs, setJobs] = useState([]);
+  const [educations, setEducations] = useState([]);
+
   const sections = [
     ContactInfo(userData),
-    Experiences(experienceData),
-    Education(educationData),
-    Languages(languageData),
+    Experiences(jobs[toBeChanged] || experience(), saveJobs, toBeChanged),
+    Education(educationData, saveEducation),
+    Languages(languageData, saveLanguage),
     Skills(skillData),
+    DisplayExpirienceData(jobs, remove, edit),
   ];
   const profile = [
     userData,
@@ -420,11 +445,63 @@ function SwitchingSections() {
   const previousPage = index > 0;
   const nextPage = index + 1 < sections.length;
   const [result, setResult] = useState(profile);
-  function save() {
+
+  function saveLanguage() {
+    const updatedLang = [...languages];
+    updatedLang.push(saveLanguageData(languageData));
+    setlanguages(updatedLang);
+  }
+  function saveEducation() {
+    const updatedEdu = [...educations];
+    updatedEdu.push(saveEducationData(educationData));
+    setEducations(updatedEdu);
+  }
+  function remove(e) {
+    const updatedJobs = [...jobs];
+    console.log(e.target.parentNode.id);
+    console.log(jobs);
+    updatedJobs.splice(e.target.parentNode.id, 1);
+    setJobs(updatedJobs);
     const updatedResult = [...result];
-    updatedResult[index] = actions[index](profile[index]);
+    updatedResult[1] = [...updatedJobs];
+    console.log("hello");
     setResult(updatedResult);
   }
+   function edit(e) {
+    const id = e.target.parentNode.id;
+    setToBeChanged(id);
+    setIndex(1);
+    setExp(experience());
+  }
+  function saveJobs() {
+    const updatedJobs = [...jobs];
+    if (toBeChanged > -1) {
+      updatedJobs[toBeChanged] = saveExperienceData(experience());
+    } else {
+      updatedJobs.push(saveExperienceData(experience()));
+    }
+    console.log(updatedJobs.slice(-1)[0]);
+    console.log(updatedJobs);
+    setExp(updatedJobs.slice(-1)[0]);
+    setJobs(updatedJobs);
+  }
+  function save() {
+    const updatedResult = [...result];
+    if (index < actions.length) {
+      if (index === 3) {
+        updatedResult[index] = [...languages];
+      } else if (index === 1) {
+        updatedResult[index] = [...jobs];
+      } else if (index === 2) {
+        updatedResult[index] = [...educations];
+      } else {
+        updatedResult[index] = actions[index](profile[index]);
+      }
+    }
+    setToBeChanged(-1);
+    setResult(updatedResult);
+  }
+
   function next() {
     save();
     if (nextPage) {
@@ -437,7 +514,6 @@ function SwitchingSections() {
       setIndex(index - 1);
     }
   }
-
   return (
     <div className="doNotPrint">
       {sections[index]}
@@ -452,5 +528,4 @@ function SwitchingSections() {
     </div>
   );
 }
-
 export default SwitchingSections;

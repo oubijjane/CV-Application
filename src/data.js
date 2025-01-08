@@ -1,3 +1,12 @@
+
+const IDGenerator = (function () {
+  let taskIdCounter = 0;
+  const setIdCount = (startingId) => taskIdCounter = startingId ;
+
+  return {
+      generateId: () => ++taskIdCounter,setIdCount
+  };
+})();
 function user() {
   let firstName = "";
   let lastName = "";
@@ -123,9 +132,8 @@ function education() {
     setLocation,
   };
 }
-
 function language() {
-  let language = "";
+  let language = "test";
   let proficiency = "";
 
   const getLanguage = () => language;
@@ -144,4 +152,4 @@ function skill() {
   return { getSkill, setSkill };
 }
 
-export { user, experience, education, language, skill };
+export { user, experience, education, language, skill,IDGenerator };
