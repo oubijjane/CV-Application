@@ -1,10 +1,10 @@
-
 const IDGenerator = (function () {
   let taskIdCounter = 0;
-  const setIdCount = (startingId) => taskIdCounter = startingId ;
+  const setIdCount = (startingId) => (taskIdCounter = startingId);
 
   return {
-      generateId: () => ++taskIdCounter,setIdCount
+    generateId: () => ++taskIdCounter,
+    setIdCount,
   };
 })();
 function user() {
@@ -73,6 +73,20 @@ function experience() {
   const getDescription = () => description;
   const setDescription = (value) => (description = value);
 
+  const equals = (otherExperience) => {
+    if (!otherExperience) return false;
+
+    return (
+      jobTitle === otherExperience.getJobTitle() &&
+      company === otherExperience.getCompany() &&
+      startYear === otherExperience.getStartYear() &&
+      startMonth === otherExperience.getStartMonth() &&
+      endYear === otherExperience.getEndYear() &&
+      endMonth === otherExperience.getEndMonth() &&
+      description === otherExperience.getDescription()
+    );
+  };
+
   return {
     getJobTitle,
     getCompany,
@@ -88,6 +102,7 @@ function experience() {
     setEndMonth,
     setEndYear,
     setDescription,
+    equals,
   };
 }
 
@@ -133,7 +148,7 @@ function education() {
   };
 }
 function language() {
-  let language = "test";
+  let language = "";
   let proficiency = "";
 
   const getLanguage = () => language;
@@ -152,4 +167,4 @@ function skill() {
   return { getSkill, setSkill };
 }
 
-export { user, experience, education, language, skill,IDGenerator };
+export { user, experience, education, language, skill, IDGenerator };

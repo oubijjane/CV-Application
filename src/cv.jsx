@@ -90,19 +90,12 @@ function Education({ data }) {
 }
 
 function Language({ data }) {
-  let id = 0;
-  function changeid() {
-    const ref = "edu" + id
-    id =id +1
-    return ref;
-    
-  }
+ 
   const Languages = Array.from(data).map((lan) => (
     <div key={IDGenerator.generateId()}>
       <p key={IDGenerator.generateId()}>
         {lan.getLanguage()}: {lan.getProficiency()}
       </p>
-      <button id={changeid} >edit</button>
     </div>
   ));
   return (
