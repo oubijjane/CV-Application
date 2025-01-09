@@ -3,7 +3,7 @@ import { useId, useState } from "react";
 import { jsPDF } from "jspdf";
 import { IDGenerator } from "./data.js";
 
-function DisplayCV({ result }) {
+function DisplayCV({ result,name = "hideCV" }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -20,31 +20,32 @@ function DisplayCV({ result }) {
         <button onClick={() => setOpen(false)}>close</button>
         <button onClick={toPdf}>download</button>
       </dialog>
-      <button onClick={() => setOpen(true)}>cv</button>
+      <button onClick={() => setOpen(true)} className={name}>cv</button>
     </>
   );
 }
 
-function toPdf() {
+async function toPdf() {
   const cv = document.querySelector(".cv");
-
+  cv.style.zoom = 1
   const doc = new jsPDF("p", "mm", [210, 290]);
-  doc.html(cv, {
+  await doc.html(cv, {
     callback: function (doc) {
       doc.save("cv");
     },
     html2canvas: { scale: 0.2633 },
   });
+  cv.style.zoom = "40%";
 }
 function ContactInfo({ data }) {
   return (
     <section className="cv-contact-info">
       <p>
-        {data.getFirstName()} {data.getLastName()}
+       <b>{data.getFirstName()}&nbsp;{data.getLastName()}</b>
       </p>
       <p>
-        {data.getEmail()} {data.getPhoneNumber()}
-        {data.getAddress()}
+        {data.getEmail()}&nbsp;{data.getPhoneNumber()}&nbsp;
+         {data.getAddress()}
       </p>
     </section>
   );
@@ -72,7 +73,7 @@ function Education({ data }) {
   const educations = Array.from(data).map(edu =>
     <div key={IDGenerator.generateId()}>
        <p>
-        {edu.getSchool()} {edu.getLocation()}: {edu.getMonth()} 
+        <b>{edu.getSchool()}</b>{edu.getLocation()}: {edu.getMonth()} 
         {edu.getYear()}
       </p>
       <p>
@@ -94,7 +95,7 @@ function Language({ data }) {
   const Languages = Array.from(data).map((lan) => (
     <div key={IDGenerator.generateId()}>
       <p key={IDGenerator.generateId()}>
-        {lan.getLanguage()}: {lan.getProficiency()}
+        <b>{lan.getLanguage()}</b>: {lan.getProficiency()}
       </p>
     </div>
   ));

@@ -4,53 +4,242 @@ body {
   width: 100%;
   margin: 0;
 }
-body {
+html {
+  scrollbar-color: #677e53 #ffffff; /* thumb color, track color */
+  scrollbar-width: thin;
+}
+#root {
+  width: 90%;
+  height: 90%;
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+body {
+  display: flex !important;
   align-items: center;
   justify-content: center;
-
+  flex-direction: column;
 }
 .container {
   display: flex;
   flex-direction: column;
 }
-section {
-  width: 298px;
-  height: 450px;
-}
 .cv {
- width: 21cm;
- min-height:  29cm;
- font-size: 15pt;
- border: 2px solid black;
-
+  width: 21cm;
+  min-height: 29cm;
+  font-size: 12pt;
+  border: 2px solid black;
 }
-.cv section{
+.cv section {
   height: auto;
-  
+
   display: inline;
+}
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+label {
+  font-size: 17px;
 }
 .cv p {
   margin: 1px;
   margin-left: 10px;
   margin-right: 10px;
 }
-dialog {
- /*  margin: auto;
-    position: absolute;
-    top: 0; left: 0; bottom: 0; right: 0; */
-}
-.cv .heading{
+
+.cv .heading {
   border-bottom: 2px solid black;
-  margin: 5px; 
+  margin: 5px;
   font-weight: bold;
 }
 .doNotPrint {
-  overflow: auto;
-  max-height: 500px;
+  height: 100%;
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
 }
-form{
+.edit {
+  border-bottom: 1px solid black;
+  margin-bottom: 5px;
+  padding: 5px;
+  background-color: #77777721;
+  width: 90%;
+}
+p {
+  white-space: pre;
+}
+button {
+  background-color: #677e53;
+  border: 0;
+  border-radius: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 1px;
+  width: max-content;
+  color: rgb(216, 216, 216);
+}
+.addInfo {
+  width: 35px;
+  height: auto;
+  padding-top: 2.5px;
+  text-align: center;
+}
+select {
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 1px solid black;
+  background-color: #53535321;
+  width: 96.5%;
+  height: 20px;
+}
+form {
   margin-bottom: 20px;
 }
-
-  
+.contactInfo,
+.experiences,
+.education,
+.languages,
+.skills {
+  display: flex;
+}
+input[type="checkbox"] {
+  width: 15px;
+  position: relative;
+  top: 5px;
+}
+h1 {
+  margin: 0;
+  color: white;
+}
+input,
+textarea {
+  border-left: 0px;
+  border-right: 0px;
+  border-top: 0px;
+  border-bottom: 1px solid black;
+  background-color: #53535321;
+  width: 95%;
+  min-height: 20px;
+  resize: vertical;
+}
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+.header {
+  width: 100%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #596d48;
+}
+button:disabled {
+  background-color: #9fa09e;
+  color: white;
+}
+dialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: fit-content;
+}
+.showcv {
+  display: inline;
+  width: 100%;
+  height: 30px;
+}
+.contactInfo,
+.experiences,
+.education,
+.languages,
+.skills,
+.editSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+section {
+  width: 500px;
+  height: 500px;
+}
+.container {
+  width: 350px;
+  margin-bottom: 10px;
+}
+.editSection .container {
+  height: 60%;
+  width: 100%;
+}
+form {
+  overflow: auto;
+  scrollbar-width: thin;
+}
+@media (max-width: 800px) {
+  .cv {
+    zoom: 40%;
+  }
+  .hideCV {
+    display: none;
+    color: brown;
+  }
+  .contactInfo,
+  .experiences,
+  .education,
+  .languages,
+  .skills,
+  .editSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  section {
+    width: 298px;
+    height: 500px;
+  }
+  .container {
+    width: 280px;
+    margin-bottom: 10px;
+  }
+  .editSection .container {
+    height: 60%;
+    width: 100%;
+    overflow: auto;
+    scrollbar-width: thin;
+  }
+  form {
+    overflow: auto;
+    scrollbar-width: 1px;
+  }
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1E1E1E;
+  }
+  .contactInfo,
+  .experiences,
+  .education,
+  .languages,
+  .skills,
+  .editSection,
+  select  {
+    color: #E0E0E0;
+  }
+  input, select {
+    background-color: #2C2C2C;
+    color: #E0E0E0;
+  }
+  * {
+    scrollbar-color: black;
+  }
+  html {
+    scrollbar-color: #677e53 #1A1A1A; /* thumb color, track color */
+    scrollbar-width: thin;
+  }
+}

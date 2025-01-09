@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import "./App.css";
+
 import {
   user,
   experience,
@@ -176,10 +176,11 @@ function Experiences({ experienceData, action, id = -1 }) {
     setDescription(e.target.value);
   }
   function changeCurrentJob(e) {
-    setCurrentJob(e.target.value);
+    setCurrentJob(e.target.checked);
   }
   return (
     <section className="experiences" id={id}>
+      <p className="title">Experience</p>
       <form>
         <div className="container">
           <label htmlFor="jobTitle">Job title*</label>
@@ -220,13 +221,12 @@ function Experiences({ experienceData, action, id = -1 }) {
           <label htmlFor="yearEnd">year</label>
           {Years(0, "yearEnd", endYear, changeEndYear)}
           <div className="subContainer">
-            <label htmlFor="currentJob">I am currently work here</label>
-            <input
+            <label htmlFor="currentJob">I am currently work here  <input
               type="checkbox"
               id="currentJob"
               checked={currentJob}
               onChange={changeCurrentJob}
-            />
+            /></label>
           </div>
         </div>
         <div className="container">
@@ -237,8 +237,10 @@ function Experiences({ experienceData, action, id = -1 }) {
             onChange={changeDescription}
           ></textarea>
         </div>
+        <button className="AddInfo" onClick={action}>
+          +
+        </button>
       </form>
-      <button onClick={action}>+</button>
     </section>
   );
 }
@@ -274,6 +276,7 @@ function Education({ educationData, action, id = -1 }) {
 
   return (
     <section className="education">
+      <p className="title">Edudaction</p>
       <form>
         <div className="container" id={id}>
           <label htmlFor="schoolName">School Name</label>
@@ -312,7 +315,8 @@ function Education({ educationData, action, id = -1 }) {
           />
         </div>
         <div className="container">
-          <p>Graduation Date (or expected graduation date)</p>
+          <p>Graduation Date <br/>
+            (or expected graduation date)</p>
           <label htmlFor="months" defaultValue={educationData.getMonth()}>
             Month
           </label>
@@ -322,15 +326,17 @@ function Education({ educationData, action, id = -1 }) {
           </label>
           {Years(10, "year", endYear, changeEndYear)}
         </div>
+        <button className="addInfo" onClick={action}>
+          +
+        </button>
       </form>
-      <button onClick={action}>+</button>
     </section>
   );
 }
 
 function Languages({ languageData, action, id = -1 }) {
   const proficiencyLevels = [
-    "Bigginer(A1)",
+    "Begginer(A1)",
     "Elementary (A2)",
     "Intermediate (B1)",
     "Upper Intermediate (B2)",
@@ -352,30 +358,38 @@ function Languages({ languageData, action, id = -1 }) {
   ));
   return (
     <section className="languages">
-      <div className="container" id={id}>
-        <label htmlFor="language">Language</label>
-        <input
-          type="text"
-          id="language"
-          value={language}
-          onChange={changeLanguage}
-        />
-      </div>
-      <div className="container">
-        <label htmlFor="proficiency">Proficiency</label>
-        <select
-          name="levels"
-          id="proficiency"
-          value={proficiency}
-          onChange={changeProficiency}
-        >
-          {dispalyProficiency}
-        </select>
-      </div>
-      <button onClick={action}>+</button>
+      <p className="title">Language</p>
+      <form>
+        <div className="container" id={id}>
+          <label htmlFor="language" required={true}>
+            Language
+          </label>
+          <input
+            type="text"
+            id="language"
+            value={language}
+            onChange={changeLanguage}
+          />
+        </div>
+        <div className="container">
+          <label htmlFor="proficiency">Proficiency</label>
+          <select
+            name="levels"
+            id="proficiency"
+            value={proficiency}
+            onChange={changeProficiency}
+          >
+            {dispalyProficiency}
+          </select>
+        </div>
+        <button className="addInfo" onClick={action}>
+          +
+        </button>
+      </form>
     </section>
   );
 }
+
 function Skills({ skillData }) {
   const [skill, setSkill] = useState(skillData.getSkill());
   function changeSkill(e) {
@@ -383,6 +397,7 @@ function Skills({ skillData }) {
   }
   return (
     <section className="skills">
+      <p className="title">Skills</p>
       <form>
         <div className="container">
           <label htmlFor="skill">Skills</label>
@@ -400,14 +415,21 @@ function DisplayExpirienceData({ data, remove, edit }) {
     return id;
   }
   const displayData = data.map((element) => (
-    <div key={IDGenerator.generateId()} id={changeid()}>
-      <p>{element.getCompany()}</p>
+    <div className="edit" key={IDGenerator.generateId()} id={changeid()}>
+      <p>
+        <b>{element.getCompany()}</b>
+      </p>
       <p>{element.getJobTitle()}</p>
       <button onClick={remove}>remove</button>
       <button onClick={edit}>edit</button>
     </div>
   ));
-  return <section>{displayData}</section>;
+  return (
+    <section className="editSection">
+      <p className="title">Edit Experiences</p>
+      <div className="container">{displayData}</div>
+    </section>
+  );
 }
 function DisplayEducationData({ data, remove, edit }) {
   let id = -1;
@@ -416,14 +438,19 @@ function DisplayEducationData({ data, remove, edit }) {
     return id;
   }
   const displayData = data.map((element) => (
-    <div key={IDGenerator.generateId()} id={changeid()}>
+    <div key={IDGenerator.generateId()} id={changeid()} className="edit">
       <p>{element.getSchool()}</p>
       <p>{element.getDegree()}</p>
       <button onClick={remove}>remove</button>
       <button onClick={edit}>edit</button>
     </div>
   ));
-  return <section>{displayData}</section>;
+  return (
+    <section className="editSection">
+      <p className="title">Edit educations</p>
+      <div className="container">{displayData}</div>
+    </section>
+  );
 }
 function DisplayLanguageData({ data, remove, edit }) {
   let id = -1;
@@ -432,14 +459,18 @@ function DisplayLanguageData({ data, remove, edit }) {
     return id;
   }
   const displayData = data.map((element) => (
-    <div key={IDGenerator.generateId()} id={changeid()}>
-      <p>{element.getLanguage()}</p>
-      <p>{element.getLanguage()}</p>
+    <div className="edit" key={IDGenerator.generateId()} id={changeid()}>
+      <p><b>{element.getLanguage()} </b> {element.getProficiency()}</p>
       <button onClick={remove}>remove</button>
       <button onClick={edit}>edit</button>
     </div>
   ));
-  return <section>{displayData}</section>;
+  return (
+    <section className="editSection">
+      <p className="title">Edit languages</p>
+      <div className="container">{displayData}</div>
+    </section>
+  );
 }
 function SwitchingSections() {
   const [userData, setUserData] = useState(user());
@@ -453,6 +484,21 @@ function SwitchingSections() {
   const [jobs, setJobs] = useState([]);
   const [educations, setEducations] = useState([]);
   const [key, setKey] = useState(200);
+  const profile = [
+    userData,
+    experienceData,
+    educationData,
+    languageData,
+    skillData,
+  ];
+  const actions = [
+    saveUserData,
+    saveExperienceData,
+    saveEducationData,
+    saveLanguageData,
+    saveSkillData,
+  ];
+  const [result, setResult] = useState(profile);
 
   const sections = [
     <ContactInfo key={200} userData={userData} />,
@@ -481,27 +527,23 @@ function SwitchingSections() {
       remove={removeJob}
       edit={editJob}
     />,
-    <DisplayEducationData key={206} data={educations} edit={editEducation} remove={removeEducation}/>,
-    <DisplayLanguageData key={206} data={languages} edit={editLanguage} remove={removeLanguage}/>,
-    
+    <DisplayEducationData
+      key={206}
+      data={educations}
+      edit={editEducation}
+      remove={removeEducation}
+    />,
+    <DisplayLanguageData
+      key={207}
+      data={languages}
+      edit={editLanguage}
+      remove={removeLanguage}
+    />,
+    <DisplayCV result={result} name="showcv" key={208} />,
   ];
-  const profile = [
-    userData,
-    experienceData,
-    educationData,
-    languageData,
-    skillData,
-  ];
-  const actions = [
-    saveUserData,
-    saveExperienceData,
-    saveEducationData,
-    saveLanguageData,
-    saveSkillData,
-  ];
+
   const previousPage = index > 0;
   const nextPage = index + 1 < sections.length;
-  const [result, setResult] = useState(profile);
 
   function saveJobs() {
     const updatedJobs = [...jobs];
@@ -510,10 +552,9 @@ function SwitchingSections() {
     } else {
       updatedJobs.push(saveExperienceData(experience()));
     }
-    setExperienceData({...experience()})
+    setExperienceData({ ...experience() });
     setJobs(updatedJobs);
     setKey(1 + key);
-    
   }
   function saveLanguage() {
     const updatedLang = [...languages];
@@ -522,7 +563,7 @@ function SwitchingSections() {
     } else {
       updatedLang.push(saveLanguageData(language()));
     }
-    setLanguageData({...language()})
+    setLanguageData({ ...language() });
     setlanguages(updatedLang);
     setKey(1 + key);
   }
@@ -533,7 +574,7 @@ function SwitchingSections() {
     } else {
       updatedEdu.push(saveEducationData(education()));
     }
-    setEducationData({...education()})
+    setEducationData({ ...education() });
     setEducations(updatedEdu);
     setKey(1 + key);
   }
@@ -584,7 +625,7 @@ function SwitchingSections() {
     setToBeChanged(id);
     setIndex(3);
     const language = languages[id];
-    console.log(language)
+    console.log(language);
     setLanguageData(language);
   }
   function editEducation(e) {
@@ -619,27 +660,48 @@ function SwitchingSections() {
 
   function next() {
     save();
-    if (nextPage) {
-      setIndex(index + 1);
+    let page = index;
+    while (true) {
+      if (nextPage) {
+        page++;
+      }
+      if (page < 5 || page > 7) {
+        break;
+      }
+      if (sections[page].props.data.length != 0) {
+        break;
+      }
     }
+    setIndex(page);
   }
   function prev() {
     save();
-    if (previousPage) {
-      setIndex(index - 1);
+    let page = index;
+    while (true) {
+      if (previousPage) {
+        page--;
+      }
+      if (page < 5) {
+        break;
+      }
+
+      if (sections[page].props.data.length != 0) {
+        break;
+      }
     }
+    setIndex(page);
   }
   return (
     <div className="doNotPrint">
       {sections[index]}
+      <div className="buttons">
       <button onClick={next} disabled={!nextPage}>
         next
       </button>
       <button onClick={prev} disabled={!previousPage}>
         previous
       </button>
-      <button onClick={save}>save</button>
-      <DisplayCV result={result} />
+      </div>
     </div>
   );
 }
